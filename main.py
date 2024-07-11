@@ -30,6 +30,8 @@ def seleccionarPosicion(tablero):
     return posicion
 
 def revisarTablero(tablero):
+    if 0 not in tablero:#Revisar posible empate
+        return 0
     posicionesDeVictorias = [
         [0, 1, 2],
         [3, 4, 5],
@@ -41,6 +43,8 @@ def revisarTablero(tablero):
         [2, 4, 6]
     ]
     for posiciones in posicionesDeVictorias: #Revisar que un jugador haya marcado alguna de las posciones
+        if tablero[posiciones[0]] == 0:
+            continue
         if tablero[posiciones[0]] == tablero[posiciones[1]] and tablero[posiciones[1]] == tablero[posiciones[2]]:
             return tablero[posiciones[0]]
     return None
@@ -57,9 +61,29 @@ def mostrarTablero(tablero):
             print(" ", end= " ")
         if(i+1) % 3 == 0: #Crear el salto de línea en el triqui
             print(f"\n{i-1} {i} {i+1}")
-        
-continuar = True
 
+def minMax(tablero, jugador, iteraciones = 0):#Evaluar posibles movimientos
+    movimientos = []
+    print(iteraciones)
+    #Devolver numeros cuando se haya ganado o haya empate
+    if revisarTablero(tablero) != None and iteraciones != 0:
+        return [revisarTablero(tablero)]
+
+    for i in range(0, len(tablero)):
+        if tablero[i] == 0:
+            copiaTablero = tablero[:]
+            copiaTablero[i] = jugador
+            puntuacion = minMax(copiaTablero, jugador*(-1), iteraciones +1)
+            movimientos.append([puntuacion[0], i])
+    
+    #Retornar el movimiento más oportuno
+    movimientos.sort(key= lambda x: x[0])
+    print(movimientos)
+    if jugador == 1:
+        movimientos.reverse()
+    return movimientos[0]
+
+continuar = True
 while continuar:
     print("Menu de opciones")
     print("1.Jugar contra una máquina")
@@ -74,16 +98,40 @@ while continuar:
             break
         case 1:
             print("Juego contra máquina")
+            tablero = crearTablero()
+            jugador = -1
+            mostrarTablero(tablero)
+
+            while revisarTablero(tablero) == None:
+                #Solicitar jugada en caso de turno del jugador
+                if jugador == -1:
+                    posicion = seleccionarPosicion(tablero)
+                else:
+                    puntuacion = minMax(tablero, jugador)
+                    print(puntuacion)
+                    posicion = puntuacion[1]
+                tablero = marcar(tablero, posicion, jugador)
+                mostrarTablero(tablero)
+                jugador *= -1
+            if revisarTablero(tablero) != 0:
+                print("¡Triqui!")
+                print(f"{"Ganaste" if jugador == 1 else "perdiste1"}")
+            else:
+                print("Vaya, es un empate")
         case 2:
             tablero = crearTablero()
             jugador = 1
             mostrarTablero(tablero)
+
             while not revisarTablero(tablero):
                 posicion = seleccionarPosicion(tablero)
                 tablero = marcar(tablero, posicion, jugador)
                 mostrarTablero(tablero)
                 jugador*= -1 #Cambiar de turno
-            print("¡Triqui!")
-            print(f"El ganador es: {"o" if jugador == -1 else "x"}")
+            if revisarTablero(tablero) == 0:
+                print("Vaya, es un empate")
+            elif revisarTablero(tablero) != None:
+                print("¡Triqui!")
+                print(f"El ganador es: {"o" if jugador == -1 else "x"}")
 
 
