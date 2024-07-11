@@ -102,7 +102,6 @@ while continuar:
             tablero = crearTablero()
             jugador = -1
             mostrarTablero(tablero)
-
             while revisarTablero(tablero) == None:
                 #Solicitar jugada en caso de turno del jugador
                 if jugador == -1:
@@ -123,12 +122,14 @@ while continuar:
             tablero = crearTablero()
             jugador = 1
             mostrarTablero(tablero)
+            print("inicia o")
 
             while not revisarTablero(tablero):
                 posicion = seleccionarPosicion(tablero)
                 tablero = marcar(tablero, posicion, jugador)
                 mostrarTablero(tablero)
                 jugador*= -1 #Cambiar de turno
+                print(f"turno de {"o" if jugador == 1 else "x"}")
             if revisarTablero(tablero) == 0:
                 print("Vaya, es un empate")
             elif revisarTablero(tablero) != None:
