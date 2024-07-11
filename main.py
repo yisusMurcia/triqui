@@ -54,13 +54,15 @@ def mostrarTablero(tablero):
     for i in range(9):
         casilla= tablero[i]
         if casilla == 1:
-            print("o", end= " ")
+            opcion = "o"
         elif casilla == -1:
-            print("x", end= " ")
+            opcion = "x"
         else:
-            print(" ", end= " ")
+            opcion = " "
         if(i+1) % 3 == 0: #Crear el salto de línea en el triqui
-            print(f"\n{i-1} {i} {i+1}")
+            print(f"{opcion}\n{i-1} {i} {i+1}\n")
+        else:
+            print(opcion + "|", end= "")
 
 def minMax(tablero, jugador, iteraciones = 0):#Evaluar posibles movimientos
     movimientos = []
@@ -78,7 +80,6 @@ def minMax(tablero, jugador, iteraciones = 0):#Evaluar posibles movimientos
     
     #Retornar el movimiento más oportuno
     movimientos.sort(key= lambda x: x[0])
-    print(movimientos)
     if jugador == 1:
         movimientos.reverse()
     return movimientos[0]
@@ -108,14 +109,14 @@ while continuar:
                     posicion = seleccionarPosicion(tablero)
                 else:
                     puntuacion = minMax(tablero, jugador)
-                    print(puntuacion)
                     posicion = puntuacion[1]
+                    print(f"la maquina marca {posicion}")
                 tablero = marcar(tablero, posicion, jugador)
                 mostrarTablero(tablero)
                 jugador *= -1
             if revisarTablero(tablero) != 0:
                 print("¡Triqui!")
-                print(f"{"Ganaste" if jugador == 1 else "perdiste1"}")
+                print(f"{"Ganaste" if jugador == 1 else "perdiste"}")
             else:
                 print("Vaya, es un empate")
         case 2:
