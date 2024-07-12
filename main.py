@@ -2,6 +2,8 @@
 Autor: Jesús Antonio Murcia
 05-07-2024"""
 
+from os import system
+
 def leerOpcion():
     opcion = input("Seleccion una opción: ")
     while len(opcion) != 1 or opcion not in "012":
@@ -66,7 +68,6 @@ def mostrarTablero(tablero):
 
 def minMax(tablero, jugador, iteraciones = 0):#Evaluar posibles movimientos
     movimientos = []
-    print(iteraciones)
     #Devolver numeros cuando se haya ganado o haya empate
     if revisarTablero(tablero) != None and iteraciones != 0:
         return [revisarTablero(tablero)]
@@ -84,8 +85,11 @@ def minMax(tablero, jugador, iteraciones = 0):#Evaluar posibles movimientos
         movimientos.reverse()
     return movimientos[0]
 
+
+#Código
 continuar = True
 while continuar:
+    system("cls")
     print("Menu de opciones")
     print("1.Jugar contra una máquina")
     print("2.Jugar con otra persona")
@@ -94,6 +98,7 @@ while continuar:
     opcion = leerOpcion()
     match opcion:
         case 0:
+            system("cls")
             continuar = False
             print("¡Gracias por jugar!")
             break
@@ -110,14 +115,17 @@ while continuar:
                     puntuacion = minMax(tablero, jugador)
                     posicion = puntuacion[1]
                     print(f"la maquina marca {posicion}")
+                system("cls")
                 tablero = marcar(tablero, posicion, jugador)
                 mostrarTablero(tablero)
                 jugador *= -1
             if revisarTablero(tablero) != 0:
                 print("¡Triqui!")
                 print(f"{"Ganaste" if jugador == 1 else "perdiste"}")
+                system("pause")
             else:
                 print("Vaya, es un empate")
+                system("pause")
         case 2:
             tablero = crearTablero()
             jugador = 1
@@ -127,13 +135,14 @@ while continuar:
             while not revisarTablero(tablero):
                 posicion = seleccionarPosicion(tablero)
                 tablero = marcar(tablero, posicion, jugador)
+                system("cls")
                 mostrarTablero(tablero)
                 jugador*= -1 #Cambiar de turno
                 print(f"turno de {"o" if jugador == 1 else "x"}")
             if revisarTablero(tablero) == 0:
                 print("Vaya, es un empate")
+                system("pause")
             elif revisarTablero(tablero) != None:
                 print("¡Triqui!")
                 print(f"El ganador es: {"o" if jugador == -1 else "x"}")
-
-
+                system("pause")
