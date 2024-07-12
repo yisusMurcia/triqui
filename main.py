@@ -62,7 +62,7 @@ def mostrarTablero(tablero):
         else:
             opcion = " "
         if(i+1) % 3 == 0: #Crear el salto de línea en el triqui
-            print(f"{opcion}\n{i-1} {i} {i+1}\n")
+            print(f"{opcion}\n{i-1} {i} {i+1}")
         else:
             print(opcion + "|", end= "")
 
